@@ -48,7 +48,7 @@ html,body{height:100%;font-family:var(--fb);background:var(--wht);color:var(--bl
 .nav-item{display:flex;align-items:center;gap:12px;padding:.75rem 1.25rem;cursor:pointer;color:var(--muted);font-size:.82rem;font-weight:500;letter-spacing:.5px;transition:all .2s;border-left:3px solid transparent}
 .nav-item:hover{color:var(--blk);background:rgba(245,192,0,.06)}
 .nav-item.active{color:var(--y);border-left-color:var(--y);background:rgba(245,192,0,.08)}
-.nav-icon{font-size:1.1rem;flex-shrink:0;width:22px;text-align:center}
+.nav-icon{font-size:1.1rem;flex-shrink:0;width:22px;text-align:center;display:none}
 .nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:10px;min-width:20px;text-align:center;display:none}
 .sb-footer{padding:1rem 1.25rem;border-top:1px solid var(--border)}
 .logout-btn{width:100%;background:#FFEBEE;border:1px solid #FFCDD2;color:var(--red);border-radius:6px;padding:10px;cursor:pointer;font-family:var(--fb);font-size:.78rem;font-weight:600;letter-spacing:1px;transition:all .2s}
@@ -759,7 +759,6 @@ function renderMenuCards() {
   if(!items.length) { el.innerHTML='<div class="empty"><div class="empty-icon">No dishes</div></div>'; return; }
   el.innerHTML = items.map(d=>`
     <div class="dish-mob-card">
-      <div class="dish-mob-icon">Dish</div>
       <div class="dish-mob-info">
         <div class="dish-mob-name">
           ${d.name}
