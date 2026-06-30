@@ -1,9 +1,4 @@
 {
   "buildCommand": "",
-  "outputDirectory": ".",
-  "framework": "static",
-  "cleanUrls": false,
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/$1" }
-  ]
+  "outputDirectory": "."
 }
