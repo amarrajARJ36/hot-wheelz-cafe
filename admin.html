@@ -267,6 +267,1155 @@ html,body{height:100%;font-family:var(--fb);background:var(--wht);color:var(--bl
       <div class="nav-item" data-page="menu"><span class="nav-icon">Menu</span>Menu Items</div>
       <div class="nav-item" data-page="categories"><span class="nav-icon">Cats</span>Categories</div>
       <div class="nav-item" data-page="reviews"><span class="nav-icon">Review</span>Reviews<span class="nav-badge" id="pendingBadge">0</span></div>
+      <div class="nav-item owner-only" data-page="story"><span class="nav-icon">Story</span>Story Media</div>
+      <div class="nav-item owner-only" data-page="settings"><span class="nav-icon">Settings</span>Settings</div>
+      <div class="nav-item owner-only" data-page="security"><span class="nav-icon">Lock</span>Security</div>
+    </nav>
+    <div class="sb-footer">
+      <button class="logout-btn" id="logoutBtn">Sign Out</button>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <!-- DASHBOARD -->
+    <div class="page active" id="page-dashboard">
+      <div class="page-head">
+        <div><div class="page-title">Dashboard</div><div class="page-sub" id="dashGreeting">Loading...</div></div>
+      </div>
+      <div class="stats-row">
+        <div class="stat-card"><div class="stat-icon">Dish</div><div class="stat-num" id="statDishes">-</div><div class="stat-lbl">Menu Items</div></div>
+        <div class="stat-card"><div class="stat-icon">Review</div><div class="stat-num" id="statPending">-</div><div class="stat-lbl">Pending Reviews</div></div>
+        <div class="stat-card"><div class="stat-icon">Cat</div><div class="stat-num" id="statCats">-</div><div class="stat-lbl">Categories</div></div>
+        <div class="stat-card"><div class="stat-icon">Lock</div><div class="stat-num" style="font-size:1rem;margin-top:.25rem">Secure</div><div class="stat-lbl">Auth Active</div><div class="stat-trend">Firebase Live</div></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><div class="card-title">Live Activity</div></div>
+        <div class="card-body"><div class="activity-list" id="activityList"></div></div>
+      </div>
+    </div>
+
+    <!-- MENU -->
+    <div class="page" id="page-menu">
+      <div class="page-head">
+        <div><div class="page-title">Menu Items</div><div class="page-sub">Changes go live instantly</div></div>
+        <button class="btn btn-primary" id="addDishBtn">+ Add Dish</button>
+      </div>
+      <div class="menu-toolbar">
+        <div class="search-box"><span>Search</span><input type="text" id="menuSearch" placeholder="Search dishes..."></div>
+        <select class="filter-sel" id="menuCatFilter"><option value="all">All Categories</option></select>
+      </div>
+      <div class="dish-cards" id="dishCardsBody">
+        <div class="empty"><div class="empty-icon">Loading...</div></div>
+      </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="page" id="page-categories">
+      <div class="page-head">
+        <div><div class="page-title">Categories</div><div class="page-sub">Manage menu sections</div></div>
+        <button class="btn btn-primary" id="addCatBtn">+ Add Category</button>
+      </div>
+      <div class="card"><div class="card-body"><div id="catList"></div></div></div>
+    </div>
+
+    <!-- REVIEWS -->
+    <div class="page" id="page-reviews">
+      <div class="page-head">
+        <div><div class="page-title">Reviews</div><div class="page-sub">Approve reviews to publish on website</div></div>
+      </div>
+      <div class="rev-filter-row">
+        <button class="rev-filter on" data-rf="all">All</button>
+        <button class="rev-filter" data-rf="pending">Pending</button>
+        <button class="rev-filter" data-rf="approved">Approved</button>
+        <button class="rev-filter" data-rf="rejected">Rejected</button>
+      </div>
+      <div class="review-cards" id="reviewsList"></div>
+    </div>
+
+    <!-- QR -->
+    <!-- STORY MEDIA -->
+    <div class="page" id="page-story">
+      <div class="page-head">
+        <div><div class="page-title">Story Media</div><div class="page-sub">Manage photos & videos for "Our Story" section</div></div>
+        <button class="btn btn-primary" id="addStoryBtn">+ Add Media</button>
+      </div>
+      <div class="card"><div class="card-body"><div id="storyList"></div></div></div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div class="page" id="page-settings">
+      <div class="page-head"><div><div class="page-title">Settings</div><div class="page-sub">Business info syncs to your website</div></div></div>
+      <div class="settings-section">
+        <div class="settings-title">Business Information</div>
+        <div class="card"><div class="card-body">
+          <div class="form-group"><label>Restaurant Name</label><input type="text" id="bizName" value="Hot Wheelz Cafe"></div>
+          <div class="form-group"><label>Phone Number</label><input type="text" id="bizPhone" value="+91 96333 66292"></div>
+          <div class="form-group"><label>Address</label><textarea id="bizAddr" rows="2">Hot Wheelz Cafe, near Mirrora Home Decor, Mevaram, Thazhuthala, Kollam, Kerala 691020</textarea></div>
+          <div class="form-row">
+            <div class="form-group"><label>Opening Time</label><input type="text" id="bizOpen" value="10:00 AM"></div>
+            <div class="form-group"><label>Closing Time</label><input type="text" id="bizClose" value="2:00 AM"></div>
+          </div>
+          <div class="form-group"><label>Instagram Handle</label><input type="text" id="bizInsta" value="@hot_wheelz_cafe"></div>
+          <button class="btn btn-primary" id="saveBizBtn" onclick="saveBizInfo()">Save to Firebase</button>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- SECURITY -->
+    <div class="page" id="page-security">
+      <div class="page-head"><div><div class="page-title">Security</div><div class="page-sub">Manage passwords</div></div></div>
+
+      <div class="settings-section">
+        <div class="settings-title">Change Your Password</div>
+        <div class="card"><div class="card-body">
+          <div class="form-group"><label>Current Password</label><div class="pwd-input-wrap"><input type="password" id="curPass"><button type="button" class="pwd-toggle" onclick="togglePwd('curPass')">👁</button></div></div>
+          <div class="form-group"><label>New Password</label><div class="pwd-input-wrap"><input type="password" id="newPass"><button type="button" class="pwd-toggle" onclick="togglePwd('newPass')">👁</button></div></div>
+          <div class="form-group"><label>Confirm Password</label><div class="pwd-input-wrap"><input type="password" id="conPass"><button type="button" class="pwd-toggle" onclick="togglePwd('conPass')">👁</button></div></div>
+          <button class="btn btn-primary" onclick="changePassword()">Update Your Password</button>
+        </div></div>
+      </div>
+
+      <div class="settings-section owner-only">
+        <div class="settings-title">Staff Password</div>
+        <div class="card"><div class="card-body">
+          <div class="info-row"><span class="info-lbl">Staff Account</span><span class="info-val">staff@hotwheelzcafe.com</span></div>
+          <div class="form-group" style="margin-top:1rem"><label>New Staff Password</label><div class="pwd-input-wrap"><input type="password" id="staffPass" placeholder="Set new staff password"><button type="button" class="pwd-toggle" onclick="togglePwd('staffPass')">👁</button></div></div>
+          <button class="btn btn-ghost btn-sm" onclick="saveStaffPass()">Update Staff Password</button>
+        </div></div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- DISH MODAL -->
+<div class="modal-backdrop" id="dishModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title" id="dishModalTitle">ADD DISH</div><button class="modal-close" onclick="closeModal('dishModal')">X</button></div>
+    <div class="modal-body">
+      <div class="form-row">
+        <div class="form-group"><label>Dish Name *</label><input type="text" id="fDishName" placeholder="e.g. Turbo Tea" maxlength="60"></div>
+        <div class="form-group"><label>Price *</label><input type="text" id="fDishPrice" placeholder="e.g. ₹120" maxlength="10"></div>
+      </div>
+      <div class="form-group"><label>Description *</label><textarea id="fDishDesc" rows="2" placeholder="Brief description..." maxlength="120"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Category *</label><select id="fDishCat"></select></div>
+      </div>
+      <div class="form-group"><label>Tag (optional)</label><input type="text" id="fDishTag" placeholder="e.g. Bestseller, New" maxlength="20"><div class="form-hint">Leave blank for no tag</div></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('dishModal')">Cancel</button>
+      <button class="btn btn-primary" id="saveDishBtn" onclick="saveDish()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- STORY MODAL -->
+<div class="modal-backdrop" id="storyModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title" id="storyModalTitle">ADD MEDIA</div><button class="modal-close" onclick="closeModal('storyModal')">X</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Media Type</label><select id="fStoryType"><option value="photo">Photo (JPG/PNG)</option><option value="video">Video (MP4)</option></select></div>
+      <div class="form-group"><label>Media URL *</label><input type="url" id="fStoryUrl" placeholder="https://example.com/image.jpg"><div class="form-hint">Upload your file to imgbb.com or imgur.com, copy the URL here</div></div>
+      <div class="form-group"><label>Label/Title *</label><input type="text" id="fStoryLabel" placeholder="e.g. Daytime vibes" maxlength="40"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('storyModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveStoryMedia()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- CAT MODAL -->
+<div class="modal-backdrop" id="catModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title" id="catModalTitle">ADD CATEGORY</div><button class="modal-close" onclick="closeModal('catModal')">X</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Category Name *</label><input type="text" id="fCatName" placeholder="e.g. Loaded Fries" maxlength="40"></div>
+      <div class="form-group"><label>Display Order</label><input type="number" id="fCatOrder" placeholder="1" min="1" max="20"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('catModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCat()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- URL MODAL -->
+<div class="modal-backdrop" id="urlModal">
+  <div class="modal">
+    <div class="modal-head"><div class="modal-title">UPDATE QR URL</div><button class="modal-close" onclick="closeModal('urlModal')">X</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>New Website URL</label><input type="url" id="fNewUrl" placeholder="https://yoursite.netlify.app"><div class="form-hint">Where QR code sends customers</div></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('urlModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveUrl()">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, updatePassword
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import {
+  getDatabase, ref, onValue, set, push, update, remove
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+// ── CONFIG ────────────────────────────────────────────────────────────────────
+const firebaseConfig = {
+  apiKey: "AIzaSyD9VLAJcc8XnFfckUV_1j9I1462UT8ptxU",
+  authDomain: "hotwheelz-cafe.firebaseapp.com",
+  databaseURL: "https://hotwheelz-cafe-default-rtdb.firebaseio.com",
+  projectId: "hotwheelz-cafe",
+  storageBucket: "hotwheelz-cafe.firebasestorage.app",
+  messagingSenderId: "652962503",
+  appId: "1:652962503:web:5642570ad4e99f66236ce2",
+  measurementId: "G-1YRNFQRJ1R"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app);
+
+// ── STATE ─────────────────────────────────────────────────────────────────────
+const OWNER_EMAIL = 'admin@hotwheelzcafe.com';
+let CATS = [], MENU = [], REVIEWS = [];
+let editingDishId = null, editingCatId = null, reviewFilter = 'all';
+
+const DEFAULT_CATS = {
+  tea:  {label:'Tea & Coffee',          order:1},
+  rice: {label:'Fried Rice & Noodles',  order:2},
+  pasta:{label:'Pasta',                 order:3},
+  combo:{label:'Fried Combo Meals',     order:4},
+  wrap: {label:'Wrap Rolls',            order:5},
+  fri:  {label:'Loaded Fries',          order:6},
+  bur:  {label:'Burgers',               order:7},
+  wings:{label:'Wings & Chicken',       order:8},
+  momo: {label:'Momos',                 order:9},
+  fal:  {label:'Falooda Items',         order:10},
+  coco: {label:'Tender Coconut Shake',  order:11},
+  avil: {label:'Avil Milk',             order:12},
+  shk:  {label:'Shakes',                order:13},
+  juice:{label:'Fresh Juice',           order:14},
+};
+
+const DEFAULT_MENU = [
+  {cat:'tea',  name:'Hotwheelz Special Turbo Tea',          desc:'Our signature spiced tea blend',                        price:'₹25',   tag:'Bestseller', active:true},
+  {cat:'tea',  name:'Tea (Normal)',                          desc:'Classic everyday tea',                                  price:'₹15',   tag:'',           active:true},
+  {cat:'tea',  name:'Black Tea',                             desc:'Strong black tea, no milk',                             price:'₹12',   tag:'',           active:true},
+  {cat:'tea',  name:'Coffee',                                desc:'Hot brewed coffee',                                     price:'₹25',   tag:'',           active:true},
+  {cat:'tea',  name:'Boost',                                 desc:'Hot Boost drink',                                       price:'₹25',   tag:'',           active:true},
+  {cat:'tea',  name:'Horlicks',                              desc:'Hot Horlicks drink',                                    price:'₹25',   tag:'',           active:true},
+  {cat:'rice', name:'Chicken Fried Rice',                    desc:'Wok-tossed rice with chicken',                          price:'₹160',  tag:'',           active:true},
+  {cat:'rice', name:'Egg Fried Rice',                        desc:'Wok-tossed rice with egg',                              price:'₹150',  tag:'',           active:true},
+  {cat:'rice', name:'Veg Fried Rice',                        desc:'Wok-tossed rice with vegetables',                       price:'₹140',  tag:'',           active:true},
+  {cat:'rice', name:'Schezwan Chicken Fried Rice',           desc:'Spicy Schezwan style chicken rice',                     price:'₹200',  tag:'',           active:true},
+  {cat:'rice', name:'Schezwan Veg Fried Rice',               desc:'Spicy Schezwan style veg rice',                         price:'₹180',  tag:'',           active:true},
+  {cat:'rice', name:'Chilly Chicken Dry',                    desc:'Crispy chilly chicken, dry style',                      price:'₹200',  tag:'',           active:true},
+  {cat:'rice', name:'Chilly Chicken',                        desc:'Tender chilly chicken with sauce',                      price:'₹160',  tag:'',           active:true},
+  {cat:'rice', name:'Chilly Gobi',                           desc:'Crispy cauliflower in chilly sauce',                    price:'₹150',  tag:'',           active:true},
+  {cat:'rice', name:'Chilly Gobi Dry',                       desc:'Dry style crispy chilly gobi',                          price:'₹180',  tag:'',           active:true},
+  {cat:'rice', name:'Chicken Noodles',                       desc:'Stir-fried noodles with chicken',                       price:'₹159',  tag:'',           active:true},
+  {cat:'rice', name:'Egg Noodles',                           desc:'Stir-fried noodles with egg',                           price:'₹149',  tag:'',           active:true},
+  {cat:'rice', name:'Veg Noodles',                           desc:'Stir-fried noodles with vegetables',                    price:'₹129',  tag:'',           active:true},
+  {cat:'pasta',name:'Penne Alfredo Chicken Pasta',           desc:'Creamy Alfredo sauce with chicken',                     price:'₹250',  tag:'',           active:true},
+  {cat:'pasta',name:'Penne Rostella Chicken Pasta',          desc:'Rich Rostella sauce with chicken',                      price:'₹230',  tag:'',           active:true},
+  {cat:'combo',name:'Lunch Box',                             desc:'2 pcs Fried Chicken, 1 Bun, 1 Mayo, 1 Ketchup',         price:'₹169',  tag:'',           active:true},
+  {cat:'combo',name:'Dinner Box',                            desc:'4 pcs Fried, 2 Bun, 2 Mayo, 1 Coleslaw, 2 Ketchup',     price:'₹349',  tag:'',           active:true},
+  {cat:'combo',name:'Beburg Meal',                           desc:'4 pcs Fried Chicken, 2 Strips, 2 Bun, 2 Mayo, Fries',   price:'₹449',  tag:'',           active:true},
+  {cat:'combo',name:'Couple Meal',                           desc:'6 pcs Fried Chicken, 2 Bun, 2 Mayo, 1 Coleslaw',        price:'₹499',  tag:'Popular',   active:true},
+  {cat:'combo',name:'Family Meal',                           desc:'8 pcs Fried Chicken, 3 Bun, 2 Mayo, Fries (M)',         price:'₹699',  tag:'',           active:true},
+  {cat:'combo',name:'Party Meal',                            desc:'12 pcs Fried Chicken, 4 Bun, 3 Mayo, Fries (M)',        price:'₹999',  tag:'',           active:true},
+  {cat:'combo',name:'Jumbo Meal',                            desc:'16 pcs Fried Chicken, 750ml Drink, 6 Bun, Fries (L)',   price:'₹1499', tag:'',           active:true},
+  {cat:'wrap', name:'Chicken Wrap Roll',                     desc:'Grilled chicken in a soft wrap roll',                    price:'₹130',  tag:'',           active:true},
+  {cat:'wrap', name:'HWC Special Chicken Wrap Roll',         desc:'Our signature special wrap roll',                        price:'₹150',  tag:'Bestseller', active:true},
+  {cat:'fri',  name:'Mexican Loaded Fries',                  desc:'Fries with cheese, jalapeños, sour cream',              price:'₹169',  tag:'',           active:true},
+  {cat:'fri',  name:'Mini Loaded Fries',                     desc:'Small loaded fries with toppings',                       price:'₹120',  tag:'',           active:true},
+  {cat:'fri',  name:'Cheesy Chicken Loaded Fries',           desc:'Fries, melted cheese, chicken strips',                  price:'₹200',  tag:'',           active:true},
+  {cat:'fri',  name:'Hotwheelz Special Fries',               desc:'Our signature loaded fries special',                     price:'₹250',  tag:'Bestseller', active:true},
+  {cat:'fri',  name:'Veg. Loaded Fries',                     desc:'Vegetarian loaded fries',                                price:'₹100',  tag:'',           active:true},
+  {cat:'bur',  name:'Regular Burger',                        desc:'Classic beef burger',                                    price:'₹100',  tag:'',           active:true},
+  {cat:'bur',  name:'Regular Patty Burger',                  desc:'Beef patty with standard toppings',                      price:'₹100',  tag:'',           active:true},
+  {cat:'bur',  name:'Zinger Burger',                         desc:'Spicy zinger chicken burger',                            price:'₹160',  tag:'',           active:true},
+  {cat:'bur',  name:'Chipotle Chicken Burger',               desc:'Smoky chipotle chicken burger',                          price:'₹200',  tag:'',           active:true},
+  {cat:'bur',  name:'Nashville Chicken Burger',              desc:'Nashville-style spicy chicken burger',                   price:'₹230',  tag:'',           active:true},
+  {cat:'wings',name:'Peri Peri Wings',                       desc:'Wings in peri peri sauce',                               price:'₹140',  tag:'',           active:true},
+  {cat:'wings',name:'Barbeque Wings',                        desc:'Smoky barbecue wings',                                   price:'₹160',  tag:'',           active:true},
+  {cat:'wings',name:'Nashville Wings',                       desc:'Nashville-style hot wings',                              price:'₹180',  tag:'',           active:true},
+  {cat:'momo', name:'Sweet Chilli Momos',                    desc:'Momos in sweet chilli sauce',                            price:'₹120',  tag:'',           active:true},
+  {cat:'momo', name:'Chicken Schezwan Momos',                desc:'Spicy Schezwan chicken momos',                           price:'₹120',  tag:'',           active:true},
+  {cat:'momo', name:'Dynamite Chicken Momos',                desc:'Explosive spicy chicken momos',                          price:'₹150',  tag:'',           active:true},
+  {cat:'momo', name:'Hotwheelz Special Glow Dumplings',      desc:'Our signature special glow dumplings',                   price:'₹160',  tag:'Bestseller', active:true},
+  {cat:'momo', name:'Fried Momos',                           desc:'Crispy pan-fried dumplings',                             price:'₹100',  tag:'',           active:true},
+  {cat:'momo', name:'Peri Peri Momos',                       desc:'Momos tossed in peri peri sauce',                        price:'₹120',  tag:'',           active:true},
+  {cat:'momo', name:'Thai Chilli Momos',                     desc:'Momos in Thai chilli sauce',                             price:'₹149',  tag:'',           active:true},
+  {cat:'fal',  name:'Mini Falooda',                          desc:'Light rose falooda with basil seeds',                    price:'₹100',  tag:'',           active:true},
+  {cat:'fal',  name:'Mango Falooda',                         desc:'Creamy mango falooda with vermicelli',                   price:'₹130',  tag:'',           active:true},
+  {cat:'fal',  name:'Dry Fruits Falooda',                    desc:'Rich falooda loaded with dry fruits',                    price:'₹150',  tag:'',           active:true},
+  {cat:'fal',  name:'Mumbai Magic Falooda',                  desc:'Mumbai-style layered falooda',                           price:'₹150',  tag:'',           active:true},
+  {cat:'fal',  name:'Royal Falooda',                         desc:'Premium royal falooda with saffron',                     price:'₹160',  tag:'',           active:true},
+  {cat:'fal',  name:'Titanic Punch',                         desc:'Large special falooda punch',                            price:'₹200',  tag:'Must Try',   active:true},
+  {cat:'coco', name:'Karikku Plain',                         desc:'Pure fresh tender coconut water',                        price:'₹60',   tag:'',           active:true},
+  {cat:'coco', name:'Tender Boost',                          desc:'Tender coconut with Boost',                              price:'₹70',   tag:'',           active:true},
+  {cat:'coco', name:'Tender Chikku',                         desc:'Tender coconut with chikku (sapota)',                    price:'₹70',   tag:'',           active:true},
+  {cat:'coco', name:'Tender Mango',                          desc:'Tender coconut with fresh mango',                        price:'₹80',   tag:'',           active:true},
+  {cat:'coco', name:'Tender Strawberry',                     desc:'Tender coconut with strawberry',                         price:'₹80',   tag:'',           active:true},
+  {cat:'coco', name:'Tender Cashew',                         desc:'Tender coconut with cashew',                             price:'₹100',  tag:'',           active:true},
+  {cat:'coco', name:'Tender Dry Fruit',                      desc:'Tender coconut with mixed dry fruits',                   price:'₹120',  tag:'',           active:true},
+  {cat:'avil', name:'Classic Avil Milk',                     desc:'Traditional Kerala avil with milk',                      price:'₹70',   tag:'',           active:true},
+  {cat:'avil', name:'Vanilla Avil Milk',                     desc:'Avil milk with vanilla flavour',                         price:'₹100',  tag:'',           active:true},
+  {cat:'avil', name:'Tender Avil Milk',                      desc:'Avil milk with tender coconut',                          price:'₹100',  tag:'',           active:true},
+  {cat:'avil', name:'Boost Avil Milk',                       desc:'Avil milk with Boost',                                   price:'₹100',  tag:'',           active:true},
+  {cat:'avil', name:'Saudi Avil Milk',                       desc:'Saudi-style rich avil milk',                             price:'₹100',  tag:'',           active:true},
+  {cat:'shk',  name:'Tender Coconut Shake',                  desc:'Fresh tender coconut shake',                             price:'₹60',   tag:'',           active:true},
+  {cat:'shk',  name:'Papaya Shake',                          desc:'Fresh papaya milkshake',                                 price:'₹60',   tag:'',           active:true},
+  {cat:'shk',  name:'Sharja Shake',                          desc:'Classic Sharja-style cream shake',                       price:'₹60',   tag:'',           active:true},
+  {cat:'shk',  name:'Chikkoo Shake',                         desc:'Rich chikku (sapota) milkshake',                         price:'₹70',   tag:'',           active:true},
+  {cat:'shk',  name:'Shamam Shake',                          desc:'Sweet shamam melon shake',                               price:'₹70',   tag:'',           active:true},
+  {cat:'shk',  name:'Mango Shake',                           desc:'Fresh mango milkshake',                                  price:'₹80',   tag:'',           active:true},
+  {cat:'shk',  name:'Oreo Shake',                            desc:'Creamy Oreo cookie milkshake',                           price:'₹80',   tag:'',           active:true},
+  {cat:'shk',  name:'Kit Kat Shake',                         desc:'Chocolate Kit Kat milkshake',                            price:'₹80',   tag:'',           active:true},
+  {cat:'shk',  name:'Avocado Shake',                         desc:'Creamy avocado milkshake',                               price:'₹90',   tag:'',           active:true},
+  {cat:'shk',  name:'Dry Fruit Delite',                      desc:'Premium dry fruit milkshake',                            price:'₹100',  tag:'',           active:true},
+  {cat:'shk',  name:'Cashew Nut Shake',                      desc:'Rich cashew nut milkshake',                              price:'₹100',  tag:'',           active:true},
+  {cat:'shk',  name:'Saudi Shake',                           desc:'Saudi-style thick cream shake',                          price:'₹100',  tag:'',           active:true},
+  {cat:'shk',  name:'Strawberry Banana Punch',               desc:'Strawberry and banana blended shake',                    price:'₹120',  tag:'',           active:true},
+  {cat:'shk',  name:'Vanilla Shake',                         desc:'Classic vanilla ice cream shake',                        price:'₹100',  tag:'',           active:true},
+  {cat:'shk',  name:'Pista Shake',                           desc:'Pistachio ice cream milkshake',                          price:'₹110',  tag:'',           active:true},
+  {cat:'shk',  name:'Chocolate Shake',                       desc:'Rich chocolate ice cream shake',                         price:'₹120',  tag:'',           active:true},
+  {cat:'shk',  name:'Butter Scotch Shake',                   desc:'Butterscotch ice cream milkshake',                       price:'₹120',  tag:'',           active:true},
+  {cat:'shk',  name:'Strawberry Shake',                      desc:'Fresh strawberry ice cream shake',                       price:'₹120',  tag:'',           active:true},
+  {cat:'shk',  name:'Spanish Delite',                        desc:'Spanish-style special cream shake',                      price:'₹130',  tag:'',           active:true},
+  {cat:'shk',  name:'Blue Diamond Special Shake',            desc:'Our signature blue diamond special shake',               price:'₹130',  tag:'Bestseller', active:true},
+  {cat:'juice',name:'Mango Juice',                           desc:'Fresh-pressed mango juice',                              price:'₹60',   tag:'',           active:true},
+  {cat:'juice',name:'Orange Juice',                          desc:'Fresh-pressed orange juice',                             price:'₹60',   tag:'',           active:true},
+  {cat:'juice',name:'Pineapple Juice',                       desc:'Fresh-pressed pineapple juice',                          price:'₹60',   tag:'',           active:true},
+  {cat:'juice',name:'Grape Juice',                           desc:'Fresh-pressed grape juice',                              price:'₹60',   tag:'',           active:true},
+  {cat:'juice',name:'Shamam Juice',                          desc:'Fresh shamam melon juice',                               price:'₹60',   tag:'',           active:true},
+  {cat:'juice',name:'Papaya Juice',                          desc:'Fresh-pressed papaya juice',                             price:'₹60',   tag:'',           active:true},
+  {cat:'juice',name:'Guava Juice',                           desc:'Fresh-pressed guava juice',                              price:'₹60',   tag:'',           active:true},
+  {cat:'juice',name:'Mosambi Juice',                         desc:'Fresh sweet lime juice',                                 price:'₹60',   tag:'',           active:true},
+  {cat:'juice',name:'ABC Juice',                             desc:'Apple, Beetroot and Carrot juice',                       price:'₹70',   tag:'',           active:true},
+];
+
+// ── AUTH STATE ────────────────────────────────────────────────────────────────
+// Show login immediately — no blocking spinner
+document.getElementById('loginScreen').style.display = 'flex';
+document.getElementById('app').style.display = 'none';
+
+onAuthStateChanged(auth, async user => {
+  if(user) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    const isOwner = user.email === OWNER_EMAIL;
+    document.getElementById('sbUserEmail').textContent = user.email.split('@')[0];
+    const h = new Date().getHours();
+    const g = h<12?'Good morning':h<17?'Good afternoon':'Good evening';
+    document.getElementById('dashGreeting').textContent = `${g}, ${isOwner?'Admin':'Staff'} — all changes sync live`;
+    if(!isOwner) document.querySelectorAll('.owner-only').forEach(el=>el.style.display='none');
+    await seedIfEmpty();
+    listenToAll();
+  } else {
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('app').style.display = 'none';
+  }
+});
+
+// ── LOGIN ─────────────────────────────────────────────────────────────────────
+document.getElementById('loginBtn').onclick = doLogin;
+document.getElementById('loginPass').addEventListener('keydown', e=>{ if(e.key==='Enter') doLogin(); });
+
+async function doLogin() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  const errEl = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  errEl.style.display = 'none';
+  if(!email || !pass) { showErr('Please enter your email and password.'); return; }
+  btn.disabled = true;
+  btn.textContent = 'Signing in...';
+  try {
+    await signInWithEmailAndPassword(auth, email, pass);
+  } catch(e) {
+    const msgs = {
+      'auth/user-not-found': 'No account found with this email.',
+      'auth/wrong-password': 'Incorrect password.',
+      'auth/invalid-email': 'Please enter a valid email.',
+      'auth/too-many-requests': 'Too many failed attempts. Try again later.',
+      'auth/invalid-credential': 'Incorrect email or password.',
+    };
+    showErr(msgs[e.code] || 'Login failed.');
+  }
+  btn.disabled = false;
+  btn.textContent = 'Sign In';
+}
+
+function showErr(msg) {
+  document.getElementById('loginErr').textContent = msg;
+  document.getElementById('loginErr').style.display = 'block';
+}
+
+document.getElementById('logoutBtn').onclick = async () => {
+  await signOut(auth);
+};
+
+// ── SYNC ───────────────────────────────────────────────────────────────────────
+function setSyncState(state, text) {
+  const pill = document.getElementById('syncPill');
+  const txt = document.getElementById('syncText');
+  if(txt) txt.textContent = text || (state==='ok'?'Live':state==='syncing'?'Saving':'Error');
+  if(pill) pill.className = 'sync-pill' + (state==='syncing'?' syncing':state==='err'?' err':'');
+}
+
+// ── SEED ──────────────────────────────────────────────────────────────────────
+async function seedIfEmpty() {
+  const MENU_VERSION = 3;
+  await new Promise(res => onValue(ref(db,'settings'), async snap => {
+    const s = snap.val() || {};
+    const needsReset = !snap.val() || (s.menuVersion||0) < MENU_VERSION;
+    if(needsReset) {
+      await set(ref(db,'categories'), DEFAULT_CATS);
+      await set(ref(db,'menu'), null);
+      for(const item of DEFAULT_MENU) {
+        await push(ref(db,'menu'), {...item, createdAt:Date.now()});
+      }
+      await set(ref(db,'settings'), {
+        qrUrl: s.qrUrl || 'https://hotwheelzcafe.netlify.app',
+        bizName: 'Hot Wheelz Cafe',
+        bizPhone: '+91 96333 66292',
+        bizAddr: 'Hot Wheelz Cafe, near Mirrora Home Decor, Mevaram, Thazhuthala, Kollam, Kerala 691020',
+        bizOpen: '10:00 AM',
+        bizClose: '2:00 AM',
+        bizInsta: '@hot_wheelz_cafe',
+        menuVersion: MENU_VERSION,
+      });
+      toast('Menu loaded - ' + DEFAULT_MENU.length + ' dishes', 'ok');
+    }
+    res();
+  }, {onlyOnce:true}));
+}
+
+// ── LISTENERS ─────────────────────────────────────────────────────────────────
+function listenToAll() {
+  setSyncState('syncing','Connecting');
+  onValue(ref(db,'categories'), snap => {
+    const d = snap.val();
+    CATS = d ? Object.entries(d).map(([id,v])=>({id,...v})).sort((a,b)=>(a.order||0)-(b.order||0)) : [];
+    renderCats(); populateCatFilters();
+    document.getElementById('statCats').textContent = CATS.length;
+    setSyncState('ok','Live');
+  });
+  onValue(ref(db,'menu'), snap => {
+    const d = snap.val();
+    MENU = d ? Object.entries(d).map(([id,v])=>({id,...v})) : [];
+    renderMenuCards();
+    document.getElementById('statDishes').textContent = MENU.length;
+    setSyncState('ok','Live');
+  });
+  onValue(ref(db,'reviews'), snap => {
+    const d = snap.val();
+    REVIEWS = d ? Object.entries(d).map(([id,v])=>({id,...v})).sort((a,b)=>(b.timestamp||0)-(a.timestamp||0)) : [];
+    renderReviews();
+    const pending = REVIEWS.filter(r=>r.status==='pending').length;
+    document.getElementById('statPending').textContent = pending;
+    const badge = document.getElementById('pendingBadge');
+    badge.textContent = pending;
+    badge.style.display = pending ? 'inline-block' : 'none';
+    setSyncState('ok','Live');
+    updateActivity();
+  });
+  onValue(ref(db,'storyMedia'), snap => {
+    const d = snap.val();
+    STORY = d ? Object.entries(d).map(([id,v])=>({id,...v})).sort((a,b)=>(a.createdAt||0)-(b.createdAt||0)) : [];
+    renderStoryMedia();
+    setSyncState('ok','Live');
+  });
+  onValue(ref(db,'settings'), snap => {
+    const s = snap.val();
+    if(!s) return;
+    document.getElementById('qrUrlDisplay').textContent = s.qrUrl||'-';
+    document.getElementById('fNewUrl').value = s.qrUrl||'';
+    if(s.bizName) document.getElementById('bizName').value = s.bizName;
+    if(s.bizPhone) document.getElementById('bizPhone').value = s.bizPhone;
+    if(s.bizAddr) document.getElementById('bizAddr').value = s.bizAddr;
+    if(s.bizOpen) document.getElementById('bizOpen').value = s.bizOpen;
+    if(s.bizClose) document.getElementById('bizClose').value = s.bizClose;
+    if(s.bizInsta) document.getElementById('bizInsta').value = s.bizInsta;
+  });
+}
+
+function updateActivity() {
+  const pending = REVIEWS.filter(r=>r.status==='pending');
+  const recent = REVIEWS.slice(0,3);
+  const el = document.getElementById('activityList');
+  const items = [
+    {type:'g', text:`<strong>${MENU.length}</strong> menu items live`},
+    pending.length ? {type:'y', text:`<strong>${pending.length}</strong> review${pending.length>1?'s':''} pending`} : null,
+    ...recent.map(r=>({type: r.status==='approved'?'g':r.status==='rejected'?'r':'y', text:`${r.name} — ${r.status}`}))
+  ].filter(Boolean).slice(0,5);
+  el.innerHTML = items.map(a=>`
+    <div class="activity-item">
+      <div class="act-dot ${a.type}"></div>
+      <div><div class="act-text">${a.text}</div></div>
+    </div>`).join('');
+}
+
+// ── MENU ───────────────────────────────────────────────────────────────────────
+function populateCatFilters() {
+  const sel = document.getElementById('menuCatFilter');
+  const cur = sel.value;
+  sel.innerHTML = '<option value="all">All Categories</option>' +
+    CATS.map(c=>`<option value="${c.id}">${c.label}</option>`).join('');
+  sel.value = cur;
+  const dishSel = document.getElementById('fDishCat');
+  if(dishSel) dishSel.innerHTML = CATS.map(c=>`<option value="${c.id}">${c.label}</option>`).join('');
+}
+
+function getFilteredMenu() {
+  const q = (document.getElementById('menuSearch')?.value||'').toLowerCase();
+  const cat = document.getElementById('menuCatFilter')?.value||'all';
+  return MENU.filter(d=>(cat==='all'||d.cat===cat)&&(!q||d.name.toLowerCase().includes(q)||d.desc.toLowerCase().includes(q)));
+}
+
+function renderMenuCards() {
+  const items = getFilteredMenu();
+  const catMap = Object.fromEntries(CATS.map(c=>[c.id,c]));
+  const el = document.getElementById('dishCardsBody');
+  if(!items.length) { el.innerHTML='<div class="empty"><div class="empty-icon">No dishes</div></div>'; return; }
+  el.innerHTML = items.map(d=>`
+    <div class="dish-mob-card">
+      <div class="dish-mob-info">
+        <div class="dish-mob-name">
+          ${d.name}
+          ${d.tag?`<span class="cat-pill">${d.tag}</span>`:''}
+          ${d.active===false?'<span class="cat-pill hidden-pill">Hidden</span>':''}
+        </div>
+        <div class="dish-mob-desc">${d.desc}</div>
+        <div style="margin-bottom:.4rem"><span class="cat-pill">${catMap[d.cat]?.label||d.cat}</span></div>
+        <div class="dish-mob-footer">
+          <div class="dish-mob-price">${d.price}</div>
+          <div class="dish-mob-actions">
+            <label class="toggle-switch" title="${d.active!==false?'Visible':'Hidden'}">
+              <input type="checkbox" ${d.active!==false?'checked':''} onchange="toggleDish('${d.id}',this.checked)">
+              <div class="toggle-track"></div>
+            </label>
+            <button class="btn btn-ghost btn-sm btn-icon" onclick="editDish('${d.id}')" title="Edit">Edit</button>
+            <button class="btn btn-danger btn-sm btn-icon" onclick="deleteDish('${d.id}')" title="Delete">Del</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('menuSearch').addEventListener('input', renderMenuCards);
+document.getElementById('menuCatFilter').addEventListener('change', renderMenuCards);
+
+document.getElementById('addDishBtn').onclick = () => {
+  editingDishId = null;
+  document.getElementById('dishModalTitle').textContent = 'ADD DISH';
+  ['fDishName','fDishPrice','fDishDesc','fDishTag'].forEach(id=>document.getElementById(id).value='');
+  populateCatFilters();
+  openModal('dishModal');
+};
+
+window.editDish = function(id) {
+  const d = MENU.find(m=>m.id===id); if(!d) return;
+  editingDishId = id;
+  document.getElementById('dishModalTitle').textContent = 'EDIT DISH';
+  document.getElementById('fDishName').value = d.name;
+  document.getElementById('fDishPrice').value = d.price;
+  document.getElementById('fDishDesc').value = d.desc;
+  document.getElementById('fDishTag').value = d.tag||'';
+  populateCatFilters();
+  document.getElementById('fDishCat').value = d.cat;
+  openModal('dishModal');
+};
+
+window.saveDish = async function() {
+  const name = document.getElementById('fDishName').value.trim();
+  const price = document.getElementById('fDishPrice').value.trim();
+  const desc = document.getElementById('fDishDesc').value.trim();
+  const cat = document.getElementById('fDishCat').value;
+  const tag = document.getElementById('fDishTag').value.trim();
+  if(!name||!price||!desc) { toast('Fill in all required fields','err'); return; }
+  const btn = document.getElementById('saveDishBtn');
+  btn.disabled=true; btn.textContent='Saving...';
+  setSyncState('syncing','Saving');
+  try {
+    if(editingDishId) {
+      await update(ref(db,`menu/${editingDishId}`),{name,price,desc,cat,tag,updatedAt:Date.now()});
+      toast(`"${name}" updated — live now`,'ok');
+    } else {
+      await push(ref(db,'menu'),{name,price,desc,cat,tag,active:true,createdAt:Date.now()});
+      toast(`"${name}" added — live now`,'ok');
+    }
+    closeModal('dishModal');
+  } catch(e) { toast('Save failed: '+e.message,'err'); setSyncState('err','Error'); }
+  btn.disabled=false; btn.textContent='Save';
+};
+
+window.deleteDish = async function(id) {
+  const d = MENU.find(m=>m.id===id);
+  if(!d||!confirm(`Delete "${d.name}"?`)) return;
+  setSyncState('syncing','Saving');
+  try { await remove(ref(db,`menu/${id}`)); toast(`"${d.name}" deleted`,'ok'); }
+  catch(e) { toast('Delete failed','err'); setSyncState('err','Error'); }
+};
+
+window.toggleDish = async function(id, active) {
+  const d = MENU.find(m=>m.id===id);
+  setSyncState('syncing','Saving');
+  try {
+    await update(ref(db,`menu/${id}`),{active});
+    toast(`"${d?.name}" ${active?'shown':'hidden'}`,'ok');
+  } catch(e) { toast('Update failed','err'); setSyncState('err','Error'); }
+};
+
+// ── STORY MEDIA ────────────────────────────────────────────────────────────────
+let STORY = [];
+let editingStoryId = null;
+
+function renderStoryMedia() {
+  const list = document.getElementById('storyList');
+  if(!STORY.length) { list.innerHTML='<div class="empty"><div class="empty-icon">No media</div><div class="empty-text">Add photos or videos for your story section</div></div>'; return; }
+  list.innerHTML = STORY.map(s=>`
+    <div class="dish-mob-card">
+      <div class="dish-mob-info">
+        <div class="dish-mob-name">
+          ${s.label}
+          <span class="cat-pill">${s.type==='video'?'MP4':'PHOTO'}</span>
+        </div>
+        <div class="dish-mob-desc" style="word-break:break-all;font-size:.7rem">${s.url}</div>
+        <div class="dish-mob-footer" style="margin-top:.75rem">
+          <div style="display:flex;gap:.4rem">
+            <button class="btn btn-ghost btn-sm btn-icon" onclick="editStoryMedia('${s.id}')" title="Edit">Edit</button>
+            <button class="btn btn-danger btn-sm btn-icon" onclick="deleteStoryMedia('${s.id}')" title="Delete">Del</button>
+          </div>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('addStoryBtn').onclick = () => {
+  editingStoryId = null;
+  document.getElementById('storyModalTitle').textContent = 'ADD MEDIA';
+  ['fStoryType','fStoryUrl','fStoryLabel'].forEach(id=>document.getElementById(id).value='');
+  openModal('storyModal');
+};
+
+window.editStoryMedia = function(id) {
+  const s = STORY.find(x=>x.id===id); if(!s) return;
+  editingStoryId = id;
+  document.getElementById('storyModalTitle').textContent = 'EDIT MEDIA';
+  document.getElementById('fStoryType').value = s.type;
+  document.getElementById('fStoryUrl').value = s.url;
+  document.getElementById('fStoryLabel').value = s.label;
+  openModal('storyModal');
+};
+
+window.saveStoryMedia = async function() {
+  const type = document.getElementById('fStoryType').value;
+  const url = document.getElementById('fStoryUrl').value.trim();
+  const label = document.getElementById('fStoryLabel').value.trim();
+  if(!url||!label) { toast('Fill in all fields','err'); return; }
+  setSyncState('syncing','Saving');
+  try {
+    if(editingStoryId) {
+      await update(ref(db,`storyMedia/${editingStoryId}`),{type,url,label});
+      toast('Media updated','ok');
+    } else {
+      await push(ref(db,'storyMedia'),{type,url,label,createdAt:Date.now()});
+      toast('Media added','ok');
+    }
+    closeModal('storyModal');
+  } catch(e) { toast('Save failed: '+e.message,'err'); setSyncState('err','Error'); }
+};
+
+window.deleteStoryMedia = async function(id) {
+  const s = STORY.find(x=>x.id===id);
+  if(!s||!confirm(`Delete "${s.label}"?`)) return;
+  setSyncState('syncing','Saving');
+  try { await remove(ref(db,`storyMedia/${id}`)); toast('Media deleted','ok'); }
+  catch(e) { toast('Delete failed','err'); setSyncState('err','Error'); }
+};
+
+// ── CATEGORIES ─────────────────────────────────────────────────────────────────
+function renderCats() {
+  const list = document.getElementById('catList');
+  if(!CATS.length) { list.innerHTML='<div class="empty"><div class="empty-icon">No cats</div></div>'; return; }
+  list.innerHTML = `<div style="display:flex;flex-direction:column;gap:.5rem">` +
+    CATS.map(c=>`
+      <div class="dish-mob-card" style="align-items:center">
+        <div style="flex:1">
+          <div style="font-weight:700;color:var(--blk);font-size:.9rem">${c.label}</div>
+          <div style="font-size:.72rem;color:var(--muted);margin-top:2px">${MENU.filter(m=>m.cat===c.id).length} dishes</div>
+        </div>
+        <div style="display:flex;gap:.4rem">
+          <button class="btn btn-ghost btn-sm btn-icon" onclick="editCat('${c.id}')">Edit</button>
+          <button class="btn btn-danger btn-sm btn-icon" onclick="deleteCat('${c.id}')">Del</button>
+        </div>
+      </div>`).join('') + '</div>';
+}
+
+document.getElementById('addCatBtn').onclick = () => {
+  editingCatId = null;
+  document.getElementById('catModalTitle').textContent = 'ADD CATEGORY';
+  document.getElementById('fCatName').value = '';
+  document.getElementById('fCatOrder').value = CATS.length+1;
+  openModal('catModal');
+};
+
+window.editCat = function(id) {
+  const c = CATS.find(x=>x.id===id); if(!c) return;
+  editingCatId = id;
+  document.getElementById('catModalTitle').textContent = 'EDIT CATEGORY';
+  document.getElementById('fCatName').value = c.label;
+  document.getElementById('fCatOrder').value = c.order||1;
+  openModal('catModal');
+};
+
+window.saveCat = async function() {
+  const label = document.getElementById('fCatName').value.trim();
+  const order = parseInt(document.getElementById('fCatOrder').value)||CATS.length+1;
+  if(!label) { toast('Category name required','err'); return; }
+  setSyncState('syncing','Saving');
+  try {
+    if(editingCatId) {
+      await update(ref(db,`categories/${editingCatId}`),{label,order});
+    } else {
+      const newId = label.toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,6)+Date.now().toString().slice(-3);
+      await set(ref(db,`categories/${newId}`),{label,order});
+    }
+    toast('Category saved — live now','ok');
+    closeModal('catModal');
+  } catch(e) { toast('Save failed: '+e.message,'err'); setSyncState('err','Error'); }
+};
+
+window.deleteCat = async function(id) {
+  const c = CATS.find(x=>x.id===id); if(!c) return;
+  const count = MENU.filter(m=>m.cat===id).length;
+  if(count>0) { toast(`Cannot delete: ${count} dishes use this category`,'err'); return; }
+  if(!confirm(`Delete "${c.label}"?`)) return;
+  setSyncState('syncing','Saving');
+  try { await remove(ref(db,`categories/${id}`)); toast('Category deleted','ok'); }
+  catch(e) { toast('Delete failed','err'); setSyncState('err','Error'); }
+};
+
+// ── REVIEWS ────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.rev-filter').forEach(btn=>{
+  btn.onclick=()=>{
+    document.querySelectorAll('.rev-filter').forEach(b=>b.classList.remove('on'));
+    btn.classList.add('on');
+    reviewFilter=btn.dataset.rf;
+    renderReviews();
+  };
+});
+
+function renderReviews() {
+  const filtered = reviewFilter==='all'?REVIEWS:REVIEWS.filter(r=>r.status===reviewFilter);
+  const el = document.getElementById('reviewsList');
+  if(!filtered.length) { el.innerHTML='<div class="empty"><div class="empty-icon">None</div></div>'; return; }
+  el.innerHTML = filtered.map(r=>`
+    <div class="review-card ${r.status}">
+      <div class="rev-head-row">
+        <div><div class="rev-name">${r.name}</div><div class="rev-date">${r.date||''}</div></div>
+        <span class="rev-status ${r.status}">${r.status}</span>
+      </div>
+      <div class="rev-stars">${'★'.repeat(r.rating||0)}${'☆'.repeat(5-(r.rating||0))}</div>
+      <div class="rev-text">"${r.text}"</div>
+      <div class="rev-actions">
+        ${r.status!=='approved'?`<button class="btn btn-success btn-sm" onclick="reviewAction('${r.id}','approved')">Approve</button>`:''}
+        ${r.status!=='rejected'?`<button class="btn btn-danger btn-sm" onclick="reviewAction('${r.id}','rejected')">Reject</button>`:''}
+        <button class="btn btn-danger btn-sm" onclick="deleteReview('${r.id}')">Delete</button>
+      </div>
+    </div>`).join('');
+}
+
+window.reviewAction = async function(id, status) {
+  setSyncState('syncing','Saving');
+  try {
+    await update(ref(db,`reviews/${id}`),{status});
+    toast(status==='approved' ? 'Review approved — live on website' : 'Review rejected','ok');
+  } catch(e) { toast('Update failed','err'); setSyncState('err','Error'); }
+};
+
+window.deleteReview = async function(id) {
+  if(!confirm('Delete this review?')) return;
+  setSyncState('syncing','Saving');
+  try { await remove(ref(db,`reviews/${id}`)); toast('Review deleted','ok'); }
+  catch(e) { toast('Delete failed','err'); setSyncState('err','Error'); }
+};
+
+// ── QR / SETTINGS ──────────────────────────────────────────────────────────────
+window.copyQrUrl = function() {
+  const url = document.getElementById('qrUrlDisplay').textContent;
+  navigator.clipboard.writeText(url).then(()=>toast('URL copied','ok'));
+};
+
+window.saveUrl = async function() {
+  const url = document.getElementById('fNewUrl').value.trim();
+  if(!url||!url.startsWith('http')) { toast('Enter a valid URL','err'); return; }
+  setSyncState('syncing','Saving');
+  try {
+    await update(ref(db,'settings'),{qrUrl:url});
+    toast('QR URL updated','ok');
+    closeModal('urlModal');
+  } catch(e) { toast('Update failed: '+e.message,'err'); setSyncState('err','Error'); }
+};
+
+window.saveBizInfo = async function() {
+  const btn = document.getElementById('saveBizBtn');
+  btn.disabled=true; btn.textContent='Saving...';
+  setSyncState('syncing','Saving');
+  try {
+    await update(ref(db,'settings'),{
+      bizName:document.getElementById('bizName').value.trim(),
+      bizPhone:document.getElementById('bizPhone').value.trim(),
+      bizAddr:document.getElementById('bizAddr').value.trim(),
+      bizOpen:document.getElementById('bizOpen').value.trim(),
+      bizClose:document.getElementById('bizClose').value.trim(),
+      bizInsta:document.getElementById('bizInsta').value.trim(),
+    });
+    toast('Business info saved','ok');
+  } catch(e) { toast('Save failed: '+e.message,'err'); setSyncState('err','Error'); }
+  btn.disabled=false; btn.textContent='Save to Firebase';
+};
+
+// ── PASSWORD VISIBILITY TOGGLE ─────────────────────────────────────────────────
+window.togglePwd = function(id) {
+  const input = document.getElementById(id);
+  if(input.type === 'password') {
+    input.type = 'text';
+  } else {
+    input.type = 'password';
+  }
+};
+
+// ── PASSWORD CHANGE ────────────────────────────────────────────────────────────
+window.changePassword = async function() {
+  const cur = document.getElementById('curPass').value;
+  const nw = document.getElementById('newPass').value;
+  const cn = document.getElementById('conPass').value;
+  if(!cur||!nw||!cn) { toast('Fill in all password fields','err'); return; }
+  if(nw!==cn) { toast('New passwords do not match','err'); return; }
+  if(nw.length<6) { toast('Password must be at least 6 characters','err'); return; }
+  
+  setSyncState('syncing','Verifying');
+  const user = auth.currentUser;
+  if(!user) { toast('Not logged in','err'); return; }
+  
+  // Re-authenticate with current password
+  try {
+    await signInWithEmailAndPassword(auth, user.email, cur);
+  } catch(e) {
+    toast('Current password incorrect','err');
+    return;
+  }
+  
+  // Update password in Firebase Auth
+  setSyncState('syncing','Updating');
+  try {
+    await updatePassword(user, nw);
+    ['curPass','newPass','conPass'].forEach(id=>document.getElementById(id).value='');
+    toast('Your password updated','ok');
+  } catch(e) {
+    toast('Update failed: '+e.message,'err');
+    setSyncState('err','Error');
+  }
+};
+
+window.saveStaffPass = async function() {
+  const p = document.getElementById('staffPass').value;
+  if(!p||p.length<4) { toast('Password must be at least 4 characters','err'); return; }
+  setSyncState('syncing','Saving');
+  try {
+    // Save to database (staff will need to use Firebase Console to update their auth password)
+    // But we can store it in settings for reference
+    await update(ref(db,'settings'),{staffPassword:p});
+    document.getElementById('staffPass').value='';
+    toast('Staff password updated','ok');
+  } catch(e) { toast('Update failed: '+e.message,'err'); setSyncState('err','Error'); }
+};
+
+// ── NAV ────────────────────────────────────────────────────────────────────────
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.onclick=()=>{
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.getElementById('page-'+item.dataset.page).classList.add('active');
+    closeSidebar();
+  };
+});
+
+document.getElementById('mobMenuBtn').onclick=()=>{
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+};
+document.getElementById('overlay').onclick = closeSidebar;
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+
+// ── MODAL ──────────────────────────────────────────────────────────────────────
+window.openModal = id=>document.getElementById(id).classList.add('open');
+window.closeModal = id=>document.getElementById(id).classList.remove('open');
+document.querySelectorAll('.modal-backdrop').forEach(bd=>{
+  bd.onclick=e=>{if(e.target===bd)bd.classList.remove('open');};
+});
+
+// ── TOAST ──────────────────────────────────────────────────────────────────────
+let toastTimer;
+function toast(msg, type='ok') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = `toast ${type} show`;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 3200);
+}
+window.toast = toast;
+</script>
+</body>
+</html>.login-secure{display:flex;align-items:center;gap:6px;font-size:.62rem;color:var(--muted);margin-top:1.25rem;justify-content:center}
+.lock-icon{color:var(--green)}
+
+/* APP SHELL */
+#app{display:none;height:100vh;overflow:hidden}
+.sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar);background:var(--wht2);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:200;transition:transform .3s cubic-bezier(.4,0,.2,1)}
+.sb-head{padding:1.25rem 1.25rem 1rem;border-bottom:1px solid var(--border)}
+.sb-logo{font-family:var(--ff);font-size:.9rem;letter-spacing:3px;color:var(--y);line-height:1}
+.sb-user{font-size:.58rem;letter-spacing:1px;color:var(--muted);margin-top:4px;display:flex;align-items:center;gap:5px}
+.sb-user-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green)}
+.sb-nav{flex:1;overflow-y:auto;padding:.75rem 0}
+.nav-item{display:flex;align-items:center;gap:12px;padding:.75rem 1.25rem;cursor:pointer;color:var(--muted);font-size:.82rem;font-weight:500;letter-spacing:.5px;transition:all .2s;border-left:3px solid transparent}
+.nav-item:hover{color:var(--blk);background:rgba(245,192,0,.06)}
+.nav-item.active{color:var(--y);border-left-color:var(--y);background:rgba(245,192,0,.08)}
+.nav-icon{font-size:1.1rem;flex-shrink:0;width:22px;text-align:center;display:none}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:.58rem;font-weight:700;padding:2px 7px;border-radius:10px;min-width:20px;text-align:center;display:none}
+.sb-footer{padding:1rem 1.25rem;border-top:1px solid var(--border)}
+.logout-btn{width:100%;background:#FFEBEE;border:1px solid #FFCDD2;color:var(--red);border-radius:6px;padding:10px;cursor:pointer;font-family:var(--fb);font-size:.78rem;font-weight:600;letter-spacing:1px;transition:all .2s}
+.logout-btn:hover{background:#FFCDD2}
+
+/* Mobile */
+.mob-header{display:none;position:fixed;top:0;left:0;right:0;height:56px;background:var(--wht);border-bottom:1px solid var(--border);z-index:190;align-items:center;justify-content:space-between;padding:0 1rem}
+.mob-logo{font-family:var(--ff);font-size:.9rem;letter-spacing:2px;color:var(--y)}
+.mob-right{display:flex;align-items:center;gap:.75rem}
+.mob-menu-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--blk);padding:6px 10px;cursor:pointer;font-size:.8rem}
+.sync-pill{font-size:.6rem;letter-spacing:1px;padding:3px 8px;border-radius:10px;background:rgba(67,160,71,.1);border:1px solid rgba(67,160,71,.2);color:var(--green);display:flex;align-items:center;gap:4px}
+.sync-pill.syncing{background:rgba(245,192,0,.1);border-color:rgba(245,192,0,.2);color:var(--y)}
+.sync-pill.err{background:rgba(229,57,53,.1);border-color:rgba(229,57,53,.2);color:var(--red)}
+.sync-dot{width:5px;height:5px;border-radius:50%;background:currentColor}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:199}
+.overlay.show{display:block}
+
+/* Main */
+.main{margin-left:var(--sidebar);height:100vh;overflow-y:auto;background:var(--wht)}
+.page{display:none;padding:2rem;min-height:100%}
+.page.active{display:block}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+.page-title{font-family:var(--ff);font-size:1.5rem;letter-spacing:1px;color:var(--blk)}
+.page-sub{font-size:.78rem;color:var(--muted);margin-top:2px}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:10px 18px;border-radius:6px;border:none;cursor:pointer;font-family:var(--fb);font-size:.78rem;font-weight:600;letter-spacing:.5px;transition:all .2s;text-decoration:none}
+.btn-primary{background:var(--y);color:var(--blk)}
+.btn-primary:hover{background:var(--yd);transform:translateY(-1px)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-danger{background:#FFEBEE;color:var(--red);border:1px solid #FFCDD2}
+.btn-danger:hover{background:#FFCDD2}
+.btn-success{background:#E8F5E9;color:var(--green);border:1px solid #C8E6C9}
+.btn-success:hover{background:#C8E6C9}
+.btn-ghost{background:var(--wht2);color:var(--muted);border:1px solid var(--border)}
+.btn-ghost:hover{color:var(--blk);border-color:var(--blk2)}
+.btn-sm{padding:7px 12px;font-size:.72rem}
+.btn-icon{width:34px;height:34px;padding:0;justify-content:center;border-radius:6px;flex-shrink:0}
+
+/* Cards */
+.card{background:var(--wht);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.card-head{padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.card-title{font-family:var(--ff);font-size:.9rem;letter-spacing:1.5px;color:var(--blk)}
+.card-body{padding:1.5rem}
+
+/* Dashboard stats */
+.stats-row{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.5rem}
+.stat-card{background:var(--wht);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem;position:relative;overflow:hidden}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--y)}
+.stat-icon{font-size:1.5rem;margin-bottom:.75rem}
+.stat-num{font-family:var(--ff);font-size:1.8rem;color:var(--y);line-height:1}
+.stat-lbl{font-size:.65rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.stat-trend{font-size:.72rem;color:var(--green);margin-top:.5rem}
+
+/* Activity */
+.activity-list{display:flex;flex-direction:column;gap:0}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:.9rem 0;border-bottom:1px solid var(--border)}
+.activity-item:last-child{border-bottom:none}
+.act-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.act-dot.y{background:var(--y)}.act-dot.g{background:var(--green)}.act-dot.r{background:var(--red)}
+.act-text{font-size:.82rem;color:var(--muted);line-height:1.5}
+.act-text strong{color:var(--blk)}
+.act-time{font-size:.65rem;color:rgba(0,0,0,.3);margin-top:2px}
+
+/* Menu toolbar */
+.menu-toolbar{display:flex;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
+.search-box{flex:1;min-width:180px;display:flex;align-items:center;background:var(--wht2);border:1px solid var(--border);border-radius:6px;padding:0 12px;gap:8px}
+.search-box input{flex:1;background:none;border:none;color:var(--blk);font-family:var(--fb);font-size:.85rem;padding:9px 0;outline:none}
+.filter-sel{background:var(--wht2);border:1px solid var(--border);color:var(--blk);font-family:var(--fb);font-size:.82rem;padding:9px 12px;border-radius:6px;outline:none;cursor:pointer;appearance:none}
+.filter-sel:focus{border-color:var(--y)}
+.filter-sel option{background:var(--wht)}
+
+/* Dish cards */
+.dish-cards{display:flex;flex-direction:column;gap:.75rem}
+.dish-mob-card{background:var(--wht);border:1px solid var(--border);border-radius:var(--radius);padding:1rem;display:flex;gap:12px;align-items:flex-start}
+.dish-mob-icon{font-size:2rem;flex-shrink:0}
+.dish-mob-info{flex:1;min-width:0}
+.dish-mob-name{font-weight:700;color:var(--blk);font-size:.9rem;margin-bottom:2px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.dish-mob-desc{font-size:.75rem;color:var(--muted);line-height:1.4;margin-bottom:.5rem}
+.dish-mob-footer{display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap}
+.dish-mob-price{font-family:var(--ff);color:var(--y);font-size:1rem}
+.dish-mob-actions{display:flex;gap:.4rem;align-items:center}
+.cat-pill{display:inline-block;background:rgba(245,192,0,.08);border:1px solid rgba(245,192,0,.2);color:var(--y);font-size:.58rem;letter-spacing:1px;text-transform:uppercase;padding:2px 8px;border-radius:2px;white-space:nowrap}
+.hidden-pill{background:#FFEBEE;border-color:#FFCDD2;color:var(--red)}
+.toggle-switch{position:relative;width:38px;height:22px;flex-shrink:0}
+.toggle-switch input{opacity:0;width:0;height:0}
+.toggle-track{position:absolute;inset:0;background:#ccc;border-radius:11px;cursor:pointer;transition:background .2s}
+.toggle-track::before{content:'';position:absolute;height:16px;width:16px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:transform .2s}
+.toggle-switch input:checked + .toggle-track{background:var(--y)}
+.toggle-switch input:checked + .toggle-track::before{transform:translateX(16px)}
+
+/* Modal */
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;display:none;align-items:flex-end;justify-content:center}
+.modal-backdrop.open{display:flex}
+@media(min-width:600px){.modal-backdrop{align-items:center}}
+.modal{background:var(--wht);border:1px solid var(--border);width:100%;max-width:520px;border-radius:16px 16px 0 0;max-height:92vh;overflow-y:auto;animation:slideup .3s cubic-bezier(.4,0,.2,1) both}
+@media(min-width:600px){.modal{border-radius:12px;margin:1rem;max-height:88vh}}
+@keyframes slideup{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-head{display:flex;align-items:center;justify-content:space-between;padding:1.25rem 1.5rem;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--wht);z-index:1}
+.modal-title{font-family:var(--ff);font-size:1rem;letter-spacing:1.5px;color:var(--blk)}
+.modal-close{background:var(--wht2);border:none;color:var(--muted);width:32px;height:32px;border-radius:6px;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.modal-close:hover{color:var(--blk)}
+.modal-body{padding:1.5rem}
+.modal-footer{padding:1.25rem 1.5rem;border-top:1px solid var(--border);display:flex;gap:.75rem;justify-content:flex-end;position:sticky;bottom:0;background:var(--wht)}
+
+/* Form */
+.form-group{margin-bottom:1.2rem}
+.form-group label{display:block;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;font-weight:600}
+.form-group input,.form-group textarea,.form-group select{width:100%;background:var(--wht2);border:1px solid var(--border);border-radius:6px;color:var(--blk);font-family:var(--fb);font-size:.9rem;padding:10px 13px;outline:none;resize:none;transition:border-color .2s;appearance:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--y)}
+.pwd-input-wrap{position:relative;display:flex;align-items:center}
+.pwd-toggle{position:absolute;right:12px;background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:6px;transition:color .2s}
+.pwd-toggle:hover{color:var(--blk)}
+.pwd-input-wrap input{padding-right:45px}
+.form-group select option{background:var(--wht);color:var(--blk)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-hint{font-size:.68rem;color:var(--muted);margin-top:4px}
+
+/* Reviews */
+.review-cards{display:flex;flex-direction:column;gap:.75rem}
+.review-card{background:var(--wht);border:1px solid var(--border);border-radius:var(--radius);padding:1.25rem}
+.review-card.pending{border-left:3px solid var(--y)}
+.review-card.approved{border-left:3px solid var(--green)}
+.review-card.rejected{border-left:3px solid var(--red);opacity:.6}
+.rev-head-row{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;margin-bottom:.6rem;flex-wrap:wrap}
+.rev-name{font-weight:700;color:var(--blk);font-size:.9rem}
+.rev-date{font-size:.65rem;color:var(--muted)}
+.rev-stars{color:var(--y);font-size:.85rem;letter-spacing:2px;margin-bottom:.5rem}
+.rev-text{font-size:.85rem;color:var(--muted);line-height:1.65;font-style:italic;margin-bottom:.85rem}
+.rev-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.rev-status{font-size:.6rem;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:10px;font-weight:700}
+.rev-status.pending{background:rgba(245,192,0,.1);color:var(--y);border:1px solid rgba(245,192,0,.2)}
+.rev-status.approved{background:rgba(67,160,71,.1);color:var(--green);border:1px solid rgba(67,160,71,.2)}
+.rev-status.rejected{background:rgba(229,57,53,.1);color:var(--red);border:1px solid rgba(229,57,53,.2)}
+.rev-filter-row{display:flex;gap:.5rem;margin-bottom:1.25rem;flex-wrap:wrap}
+.rev-filter{padding:6px 14px;border-radius:4px;border:1px solid var(--border);background:none;color:var(--muted);font-family:var(--fb);font-size:.75rem;cursor:pointer;transition:all .2s}
+.rev-filter.on{background:var(--y);color:var(--blk);border-color:var(--y)}
+
+/* Settings */
+.settings-section{margin-bottom:2rem}
+.settings-title{font-family:var(--ff);font-size:.85rem;letter-spacing:2px;color:var(--y);margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);text-transform:uppercase}
+.qr-box{background:var(--wht);border:1px solid var(--border);border-radius:var(--radius);padding:1.5rem;display:flex;flex-direction:column;align-items:center;gap:1rem;margin-bottom:1.25rem}
+.qr-placeholder{width:150px;height:150px;background:var(--wht2);border:2px dashed var(--border);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.url-display{background:rgba(245,192,0,.06);border:1px solid rgba(245,192,0,.2);border-radius:6px;padding:.75rem 1rem;font-size:.8rem;color:var(--y);word-break:break-all;text-align:center;width:100%}
+.info-row{display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;padding:.9rem 0;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-lbl{font-size:.62rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:600;flex-shrink:0}
+.info-val{font-size:.85rem;color:var(--blk);text-align:right;line-height:1.5}
+.info-val a{color:var(--y);text-decoration:none}
+
+/* Toast */
+.toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(80px);background:var(--wht2);border:1px solid var(--border);border-radius:8px;padding:.75rem 1.25rem;font-size:.82rem;color:var(--blk);z-index:9000;transition:transform .3s;white-space:nowrap;box-shadow:0 8px 32px rgba(0,0,0,.08);display:flex;align-items:center;gap:.5rem}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.ok{border-color:rgba(67,160,71,.3);color:var(--green)}
+.toast.err{border-color:rgba(229,57,53,.3);color:var(--red)}
+
+/* Empty */
+.empty{text-align:center;padding:3rem 1rem;color:var(--muted)}
+.empty-icon{font-size:3rem;margin-bottom:1rem;opacity:.4}
+.empty-text{font-size:.85rem;line-height:1.6}
+
+@keyframes fadeup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* Mobile */
+@media(max-width:768px){
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .mob-header{display:flex}
+  .main{margin-left:0;padding-top:56px}
+  .page{padding:1.25rem}
+  .stats-row{grid-template-columns:1fr 1fr}
+  .form-row{grid-template-columns:1fr}
+  .page-head{margin-bottom:1.25rem}
+}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">HOT WHEELZ</div>
+    <div class="login-tagline">Secure Admin Panel</div>
+    <div class="login-err" id="loginErr"></div>
+    <div class="l-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@hotwheelzcafe.com" autocomplete="email">
+    </div>
+    <div class="l-group">
+      <label>Password</label>
+      <input type="password" id="loginPass" placeholder="Your password" autocomplete="current-password">
+    </div>
+    <button class="login-btn" id="loginBtn">Sign In</button>
+    <div class="login-secure"><span class="lock-icon">🔒</span> Secured by Firebase</div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="mob-header">
+    <div class="mob-logo">HW ADMIN</div>
+    <div class="mob-right">
+      <div class="sync-pill" id="syncPill"><div class="sync-dot"></div><span id="syncText">Live</span></div>
+      <button class="mob-menu-btn" id="mobMenuBtn">Menu</button>
+    </div>
+  </div>
+  <div class="overlay" id="overlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-head">
+      <div class="sb-logo">HOT WHEELZ</div>
+      <div class="sb-user"><div class="sb-user-dot"></div><span id="sbUserEmail">-</span></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="nav-item active" data-page="dashboard"><span class="nav-icon">Dashboard</span>Dashboard</div>
+      <div class="nav-item" data-page="menu"><span class="nav-icon">Menu</span>Menu Items</div>
+      <div class="nav-item" data-page="categories"><span class="nav-icon">Cats</span>Categories</div>
+      <div class="nav-item" data-page="reviews"><span class="nav-icon">Review</span>Reviews<span class="nav-badge" id="pendingBadge">0</span></div>
       <div class="nav-item owner-only" data-page="settings"><span class="nav-icon">Settings</span>Settings</div>
       <div class="nav-item owner-only" data-page="security"><span class="nav-icon">Lock</span>Security</div>
     </nav>
