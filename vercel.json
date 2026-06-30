@@ -1,0 +1,10 @@
+{
+  "buildCommand": "",
+  "outputDirectory": ".",
+  "framework": "static",
+  "cleanUrls": false,
+  "public": ".",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/$1" }
+  ]
+}
