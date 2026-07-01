@@ -250,7 +250,12 @@ footer{background:#050505;border-top:1px solid rgba(245,192,0,.12)}
  #story,#reviews{padding:4rem 1.25rem}
  .loc-left{padding:2.5rem 1.5rem}
  .bs-card{width:180px}
+ #instagram iframe{width:320px!important;height:400px!important}
 }
+
+#instagram{display:flex;flex-direction:column;align-items:center}
+#instagram > div:last-child{width:100%;display:flex;justify-content:center;overflow-x:auto;-webkit-overflow-scrolling:touch}
+#instagram iframe{margin:0 auto;display:block}
 </style>
 </head>
 <body>
@@ -403,16 +408,16 @@ footer{background:#050505;border-top:1px solid rgba(245,192,0,.12)}
 </section>
 
 <!-- INSTAGRAM FEED SECTION -->
-<section id="instagram" style="background:var(--blk);padding:4rem 2rem;text-align:center;min-height:600px">
- <div style="max-width:1200px;margin:0 auto">
+<section id="instagram" style="background:var(--blk);padding:4rem 1rem;text-align:center;min-height:700px">
+ <div style="max-width:100%;margin:0 auto">
  <div class="reveal">
  <div class="section-label" style="justify-content:center">Follow Us</div>
  <h2 class="rev-h2" style="margin-bottom:2rem">Instagram Stories</h2>
  </div>
  
- <!-- Instagram Embed - Shows profile & posts -->
- <div style="display:flex;justify-content:center;margin:2rem 0">
- <iframe src="https://www.instagram.com/hot_wheelz_cafe/embed" width="400" height="480" frameborder="0" scrolling="no" allowtransparency="true" style="border-radius:8px;max-width:100%;border:1px solid rgba(245,192,0,.1)"></iframe>
+ <!-- Instagram Embed - Full Width -->
+ <div style="display:flex;justify-content:center;margin:2rem auto;width:100%;overflow-x:auto">
+ <iframe src="https://www.instagram.com/hot_wheelz_cafe/embed" width="540" height="680" frameborder="0" scrolling="no" allowtransparency="true" style="border-radius:8px;border:1px solid rgba(245,192,0,.1);min-width:540px"></iframe>
  </div>
  </div>
 </section>
