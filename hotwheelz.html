@@ -338,7 +338,7 @@ footer{background:#050505;border-top:1px solid rgba(245,192,0,.12)}
  <div class="stat"><div class="stat-n"> 5</div><div class="stat-l">Rating</div></div>
  </div>
  </div>
- <div class="story-photos reveal">
+ <div class="story-photos reveal" id="storyPhotos">
  <div class="story-photo"><img src="https://hotwheelzcafe.lovable.app/assets/seating-DbzKallU.jpeg" alt="Open-air seating" loading="lazy"><div class="story-photo-label">Open-air seating</div></div>
  <div class="story-photo"><img src="https://hotwheelzcafe.lovable.app/assets/cafe-night-BAqKd9Qu.jpeg" alt="Truck-front" loading="lazy"><div class="story-photo-label">Truck-front service</div></div>
  <div class="story-photo"><img src="https://hotwheelzcafe.lovable.app/assets/lights-DjWq5xXr.jpeg" alt="Fairy lights" loading="lazy"><div class="story-photo-label">Canopy of lights</div></div>
@@ -398,6 +398,24 @@ footer{background:#050505;border-top:1px solid rgba(245,192,0,.12)}
  <h3>THANK YOU!</h3>
  <p>Your review is awaiting approval and will go live shortly.</p>
  </div>
+ </div>
+ </div>
+</section>
+
+<!-- INSTAGRAM SECTION -->
+<section id="instagram" style="background:var(--blk);padding:6rem 3rem;text-align:center">
+ <div class="reveal" style="max-width:1200px;margin:0 auto">
+ <div class="section-label" style="justify-content:center">Follow Us</div>
+ <h2 class="rev-h2" style="margin-bottom:1rem">Instagram Stories</h2>
+ <p style="color:var(--muted);margin-bottom:2.5rem;font-size:.9rem">See what's cooking at Hot Wheelz Cafe</p>
+ 
+ <div style="display:flex;justify-content:center;gap:2rem;flex-wrap:wrap;margin:3rem 0">
+  <a href="https://instagram.com/hot_wheelz_cafe" target="_blank" style="display:inline-flex;flex-direction:column;align-items:center;gap:.75rem;text-decoration:none;padding:2rem;background:rgba(245,192,0,.05);border:1px solid rgba(245,192,0,.15);border-radius:8px;min-width:250px;transition:all .2s;cursor:pointer" onmouseover="this.style.background='rgba(245,192,0,.1)'" onmouseout="this.style.background='rgba(245,192,0,.05)'">
+   <div style="font-size:3rem">📸</div>
+   <div style="font-weight:700;color:var(--wht);font-size:1.1rem">Follow Us</div>
+   <div style="color:var(--muted);font-size:.85rem">@hot_wheelz_cafe</div>
+   <div style="margin-top:1rem;background:var(--y);color:var(--blk);padding:8px 20px;border-radius:4px;font-weight:700;font-size:.75rem;letter-spacing:1px">VISIT INSTAGRAM</div>
+  </a>
  </div>
  </div>
 </section>
@@ -519,6 +537,17 @@ function init() {
  ? Object.entries(data).map(([id,v])=>({id,...v})).filter(r=>r.status==='approved').reverse()
  : [];
  renderReviews(approved);
+ });
+
+ // Story Media
+ onValue(ref(db,'storyMedia'), snap => {
+ const data = snap.val();
+ if(data) {
+ const storyItems = Object.entries(data)
+ .map(([id,v])=>({id,...v}))
+ .sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+ renderStoryMedia(storyItems);
+ }
  });
 
  // Fallback hide loader after 3s
@@ -644,6 +673,19 @@ window.openPopup = function(id) {
  document.getElementById('popup').classList.add('on');
  document.body.style.overflow='hidden';
 };
+
+// STORY MEDIA
+function renderStoryMedia(items) {
+ const el = document.getElementById('storyPhotos');
+ if(!el || !items.length) return;
+ el.innerHTML = items.map(item => {
+  if(item.type === 'video') {
+   return `<div class="story-photo"><video src="${item.url}" style="width:100%;height:100%;object-fit:cover" loading="lazy"></video><div class="story-photo-label">${item.label}</div></div>`;
+  } else {
+   return `<div class="story-photo"><img src="${item.url}" alt="${item.label}" loading="lazy"><div class="story-photo-label">${item.label}</div></div>`;
+  }
+ }).join('');
+}
 
 // REVIEWS 
 function renderReviews(reviews) {
