@@ -250,12 +250,15 @@ footer{background:#050505;border-top:1px solid rgba(245,192,0,.12)}
  #story,#reviews{padding:4rem 1.25rem}
  .loc-left{padding:2.5rem 1.5rem}
  .bs-card{width:180px}
- #instagram iframe{width:320px!important;height:400px!important}
 }
 
-#instagram{display:flex;flex-direction:column;align-items:center}
-#instagram > div:last-child{width:100%;display:flex;justify-content:center;overflow-x:auto;-webkit-overflow-scrolling:touch}
-#instagram iframe{margin:0 auto;display:block}
+/* Elfsight Widget Responsive */
+#instagram{padding:4rem 1rem!important}
+.elfsight-app-ec5671f2-84be-4198-b4f9-051f82c7e5e2{width:100%!important;max-width:100%!important}
+@media(max-width:600px){
+ #instagram{padding:3rem 0.5rem!important}
+ .elfsight-app-ec5671f2-84be-4198-b4f9-051f82c7e5e2{width:100%!important}
+}
 </style>
 </head>
 <body>
@@ -408,17 +411,22 @@ footer{background:#050505;border-top:1px solid rgba(245,192,0,.12)}
 </section>
 
 <!-- INSTAGRAM FEED SECTION -->
-<section id="instagram" style="background:var(--blk);padding:4rem 1rem;text-align:center;min-height:700px">
- <div style="max-width:100%;margin:0 auto">
- <div class="reveal">
+<section id="instagram" style="background:var(--blk);padding:4rem 2rem;text-align:center">
+ <div style="max-width:1400px;margin:0 auto">
+ 
+ <!-- Heading - Full Width Above Widget -->
+ <div class="reveal" style="margin-bottom:3rem">
  <div class="section-label" style="justify-content:center">Follow Us</div>
- <h2 class="rev-h2" style="margin-bottom:2rem">Instagram Stories</h2>
+ <h2 class="rev-h2" style="margin-bottom:0">Instagram Stories</h2>
  </div>
  
- <!-- Instagram Embed - Full Width -->
- <div style="display:flex;justify-content:center;margin:2rem auto;width:100%;overflow-x:auto">
- <iframe src="https://www.instagram.com/hot_wheelz_cafe/embed" width="540" height="680" frameborder="0" scrolling="no" allowtransparency="true" style="border-radius:8px;border:1px solid rgba(245,192,0,.1);min-width:540px"></iframe>
+ <!-- Elfsight Instagram Feed Widget -->
+ <div style="display:flex;justify-content:center;width:100%">
+ <!-- Elfsight Instagram Feed -->
+ <script src="https://elfsightcdn.com/platform.js" async></script>
+ <div class="elfsight-app-ec5671f2-84be-4198-b4f9-051f82c7e5e2" data-elfsight-app-lazy style="width:100%;max-width:100%"></div>
  </div>
+ 
  </div>
 </section>
 
@@ -774,8 +782,5 @@ document.getElementById('bsArrowRight').addEventListener('click', () => scrollCa
 
 init();
 </script>
-
-<!-- Instagram Embed Script -->
-<script async defer src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>
